@@ -1,3 +1,4 @@
+import styled from '@emotion/styled';
 import React from 'react';
 
 interface Props {
@@ -5,6 +6,9 @@ interface Props {
   newDeaths: number;
   newRecovred: number;
 }
+const Wrapper = styled.div`
+  text-align: center;
+`;
 
 const GlobalInfo: React.FC<Props> = ({ newConfiremd, newDeaths, newRecovred }) => {
   return (
