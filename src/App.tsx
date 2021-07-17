@@ -1,26 +1,38 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import GlobalInfo from './components/GlobalInfo';
+import { ResponseData } from '../src/types';
+import CountryList from './components/CountryList';
 
-function App() {
+const App: React.FC = () => {
+  const [data, setData] = useState<ResponseData | undefined>();
+
+  const fetchData = async () => {
+    const result = await fetch('https://api.covid19api.com/summary');
+    const data: ResponseData = await result.json();
+
+    setData(data);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  if (!data) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <GlobalInfo
+        newConfiremd={data?.Global?.NewConfirmed}
+        newDeaths={data?.Global?.NewDeaths}
+        newRecovred={data?.Global?.NewRecovered}
+      />
+      <CountryList countries={data?.Countries} />
     </div>
   );
-}
+};
 
 export default App;
